@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html xml:lang="pt-br" lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>UTFPR - SGCE - Extensão - Sistema de Gestão de Certificados Eletrônicos UTFPR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://fonts.googleapis.com/css?family=Pontano+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+    <style>
+        /* Estilos baseados no css original da UTFPR */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        /* Faixa única do header, igual ao site original: fina, com logo pequena
+           e menu de navegação na mesma barra (lado direito) */
+        .header-bg {
+            background-color: #3b5064; /* Cor exata da barra superior do SGCE */
+            color: white;
+        }
+        .content-box {
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+        }
+        .btn-sgce {
+            background-color: #4b6b8a;
+            color: white;
+            border: 1px solid #324a61;
+            cursor: pointer;
+        }
+        .btn-sgce:hover {
+            background-color: #3b5064;
+        }
+        .tab-active {
+            background-color: #ffffff;
+            border-top: 3px solid #cc0000;
+            border-left: 1px solid #cccccc;
+            border-right: 1px solid #cccccc;
+            border-bottom: 1px solid #ffffff; /* Fundo branco para mesclar com a caixa de baixo */
+            color: #333;
+            font-weight: bold;
+        }
+        .tab-inactive {
+            background-color: #e5e5e5;
+            border: 1px solid #cccccc;
+            color: #666;
+            cursor: pointer;
+        }
+        .tab-inactive:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- HEADER EM DUAS LINHAS, igual ao site original:
+         Linha 1 (altura FIXA de 44px): logo grande posicionada de forma absoluta
+         (centralizada verticalmente, "vazando" para fora da faixa sem esticá-la),
+         título centralizado na página, "Usuário: X / Sair" à direita.
+         Linha 2: menu de navegação (Cadastros/Certificados/Evento/Sistema), à direita, mais fino -->
+    <div class="header-bg shadow-md">
+        <div class="relative flex items-center justify-between px-4 h-[44px] overflow-visible">
+            <div class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center z-10">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABkCAYAAABkW8nwAAAACXBIWXMAAAsTAAALEwEAmpwYAAABNmlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjarY6xSsNQFEDPi6LiUCsEcXB4kygotupgxqQtRRCs1SHJ1qShSmkSXl7VfoSjWwcXd7/AyVFwUPwC/0Bx6uAQIYODCJ7p3MPlcsGo2HWnYZRhEGvVbjrS9Xw5+8QMUwDQCbPUbrUOAOIkjvjB5ysC4HnTrjsN/sZ8mCoNTIDtbpSFICpA/0KnGsQYMIN+qkHcAaY6addAPAClXu4vQCnI/Q0oKdfzQXwAZs/1fDDmADPIfQUwdXSpAWpJOlJnvVMtq5ZlSbubBJE8HmU6GmRyPw4TlSaqo6MukP8HwGK+2G46cq1qWXvr/DOu58vc3o8QgFh6LFpBOFTn3yqMnd/n4sZ4GQ5vYXpStN0ruNmAheuirVahvAX34y/Axk/96FpPYgAAACBjSFJNAAB6JQAAgIMAAPn/AACA6AAAUggAARVYAAA6lwAAF2/XWh+QAAAeK0lEQVR42uydeXxU5b3/P89z1jmzJDOZ7CFhC5sgKiigaMVarZfaVmilLVYttypUrftS0La/622tWG9t7UK1vVetVXu7uKGIG4hUUSoatiyEsGSSTDKTzCSznf35/THJFJJJALcS7/m8XudFXsyZk5nzvM/3+S7P9wlhjMGRo49a1LkFjhywHDlgOXLAcuTIAcuRA5YjByxHjhywHDlgOXLAcuTIAcuRA5YjByxHjhywHDlgOXLAcuTIAcuRA5YjByxHjhywHDlgOXLAcuTIAcuRA5YjByxHjhywHB134kd68b6771m4b9++s3Zu335GQUFBDAzk0NcZY37VNJ5lsO8hh7+UU1ekC8u/8x0su+IKhDs68p7j8/mwZ8+eipWrVv2Otxkkytuf9sZ/m9mE2UyeOXvWLzxezzOGYRzT+wkAwzAhSRJM20KwpBg+rxddkQjisRiuvPJKPPLoo4hEIigtLcWSr16cPdc081sYSmFZFjra2xEsLkZnOIwHf/lrTJo+DWMnjEdBQQF0w0BLczPOPeezGDt+HDLpDACgckzVsYEVDofnHNi/f8muXbtqAv4AGAYNNwN020oB7B4MA1Y42gVVVSEKAgKBQN5zPB4P3G53YX19/QXUtOESBHzawWI2A2MMRaUlO3wFvmd0/ejBIoTANE1k1Aw8Lje8hT6UVpSPHotlGkZKzahdyWSyxiW7MHgDEcYYdNvsJiBDoeuXpusIhdpw8OABdHSE855TWFiIxsZGI5PJgLNswDA/9WDZtg3GGEzL0CzbgmWbR0sVDM2AZZmYM3cu/v7aRkiyDELp6AGL53lTEARTEiWIopgXLNjUHukalcWlePzxx/HHJx/HEWhhsixDZAQcw/8ZsHieN3ieh23bR2WpDMOApqn46sUXY8b06Xh57QugHAWOs12D+I/7FxBCYNs2LNvGcH7YwHmU4xyvd4T7o+saUqk0zjvvfJx55lk4cOAAGCOjz3n/SHwJxsBxHDiO/9BmiLGsXzISoAwM9CimBWazrJOIf83ADPhYYIwg+++I05+maeiNx/H1pZdgzpw56O7ugWmaIMcnVx8/WB+VLMtCOpWG1+eFyRHkp5TAtEwwXYNbkmHnGSxKKVRVQ8rQUFBYAMu0YDP2iQ+QTbIsGQwFJmMwhwGLUopkMoVMOo2lSy/B5y+4AHub94DjeJDjlarRAhZjDIIg4OwFZz/REQ63U7dECKFDwm+L2SCUEiutfv5gc8tUQRSHXEvNqCgrL01PmH7C/2x7/z21yOsjouQCOwof5yP8RmCMUdu2+WBJyZ99Xi/0YdINmqZh/IQJmD1rFk45eRZiPT2wbRs8T47rMRsdYNk2dMvCTbfd+u2NGzemH/vTEygrKwOlNDs1EgLLsqBndMybNw9GRjXq63ZO9UvSkIAjnUlDcbu7f/yj/7zmgV/+FvNPq8HMGYVIpvVP5AHJGhkBICLAGFyeSnCcBMasIdaXEgPxBFAUqIHf70N3dw8IwajQ6JgKCUHa0BBPJ8d+57prd0fiPVi3bl0OroGczrTJUzF+7Dj8452t/uEcOkop4vFeXhAg/exnqzWWeOskpr99LjhR/QTAYoSAB6wEiJ0AIBggWxhIy6HTGgMBhQ4KG4WBWiQTNiKRCCjljuvpb1T6WIRSJFNJkkwmsWLFCgDAunXrUFxSDMMwMW3yFNROnIhMJgPbNslIA0ApgaoZSBqA3varn8qRJz5LhI85Ij00TmAUsBhARZj+yx8GX/Qt2GrOUhEYoEgjTj+PNKGgyBxVQOKA9QFFCUUqlYKmabj22mthGgZefuUVzJ0zF5Nra5HJZMAL/FFEetlBYn11gJG0dNjAJ+FjsUPAYgzIpgpY9vMSZONdDRzSiJOFSOJ08IiPyvQIP9o+MKUU6XQahBBce911KC0rQ6q3r99SHSUchAcBDy78fbB0g8GETzghy+ws20QHoyYBsQBqgsACT5KI40KkcUY/VPa/LCXyocZpND4NlGYtFyEEE8aPPzaocqaDAbwPIAycDdBBB2cDxAaoBXBW9ueP7GADP1MQRhgBARgFx9Lo1j+DFDmrHyprVEI1Ki3WoXAZhpED7IM/VzSvtbJBwTOAwYZtAZI9MHN9lD6XBdNK+hlRwCOOtFmCLvVE+OVk1qqNUqhGNVgfvzvEQ9YNaK6aZKpg9g5Jb/LKikI+ur/kYQNEILoy9T1GA+ARwYGuCTAsF3iiwR7l988BaxhjwtsmGBh036KHxLH/dWNP/H309qZBKflI7AjrDxNdrAA8EZDKMMTNFDxSErwQhE2sPAaLgFICnudzx9Gma3iBhyAIGC4RRikFoTR3XY7nHLA++txG1qIYkgLGIn1i6gW8sY3ilw/8HD5ZAgfyoZ19ZttgAD5zzgJIkoTK6hqUV1bABohlWSx/JYAAjIAxRhgYBWAJogiPx4OioiJQAFY4nEsYa5rWbxxt2JYNy7JgW9ZwSTbYlgXGGJ+NV4klyzIKCgoQDAbB8zwyquqA9aG4Ytlans0zmKYpHmhJo7OLzAiFWv/iFiSTB/nQK1xt26YA4Ts7O2+rGjPm6UcffRi76uvhkuXnbMuaLILmCVWzCQlKKUcoJYwxE4xpYrO8q7sv3jy5tnZ9dXX1pp07dkCWZZSVlYExhlgsdvGSixb/iBIy7LotQnJFfkEUJQbGTI/H02Fy2NZycH/HnNPmrB03fvyug/v342jcAQesEQFjYBCRNgPIZPb7Q6HWSW5BgADuQ1ssyzRBeR6dnZ2nSrL89P59+1G/ezfcbvcMyzSr5TxgsX7LQijN1TYVRcGupoYT+tQ0Av7Ayhknnvjswgv+7Zqy8vLWU045Gc88GwIICTTU10+kIKCHTHHk0Nxa/38QZJc5EUogStLEvi1vnpnWMigrK/vJhV/84v1nnjH/hnxr8xywPoA3JPA2eE7QRVGEKIgQhokkjwksjgPPcZAkKS6KItxuN3w+HzweTw9jrFpiJDfolmVlB/sQ/4jjuGw2nhBIUBAsKkIymcSGV1/9opnKnDx39uxzE4lEk8ftRiwe0/0BPyiya94IIbBME4ZlgXFkiOniQCBSDoRSKF4PQAji8Tge+u2D13eF2os/c+ZZl/j9fiT55Kcrj/VpChIYY7lIM1/ahNk2JFGCz+eD2+2G1+sFRzn09PQgHosh1tMDPZMBMWy4RRmTqmrwxpY3x9zzo7t/JgkSvB4PLMtih7tT2SW6DIBS6INS4INS4IVS4IXkdUMzdPTGexGJRKCl0uBsIODxYWxxOZ55fu3Sp//6t+W7duzEO1vexta333Es1sft7xNy9E49IQSUEBBCGCH5I03bssELPCoqy38F0McYsxGJRMhFX1mES751Obb8/e+FL7/40hUbN264yDQteH1eWJaN8oIibH+/7t80y5g2pqZm996WlsNg7o5EcdWK5S8VlgS//9B//57UVFeDMQbDMGBZFrn37p+AB+H/9PiTKzZu3PD1dCYNl8sFQRJRKLrw0Jo1d06cVLtGFEVohvavA8u27exiuiME6hw/OjnneR6xRB+i8R5whB5VXtOybXCUItLTXSy73cjo2tBCc78/RV3idlMzt5gZA4lEAiWlpTh51imIdXejwFewbsbMEy95/LHHHkgkEoWKokBRXDjYEcKmTZuu/u4N11+98bXXDuM9bWoQve7WlXesertxTxNef/11VFRUQNM0MMYw+9TZ0NMqll9z9RuB4mD9Y//z8A9FUaSEEChuN9KpdEVzy94FHq9nw3DdRZ/QmncLJrOOuOZ9NIJFACSTKVSOrd732annrWeMybbN6FE8bIRSipNPOfnNKVOmINQWQl1dHVwu19AJk1Kf4JZBCYGaziAejwMAEokkEokEvn3VlY/t2L790vUvvPg5RVFAKIVAODTUN1Q2NTWB4/nDRp/xHDojXQoA3H333fjhD3+IzZs3Q5IkAICqqtAyGWi6jiuWX3nXzu3bF9Vte/+kQFEAgiCAEIJNG18/VZCkDbZlYfny5R8tWJRSGJqBZDIJbpgwNqGpuHrFd3D9jTegvb097zkFBQVobGzEdddfD9Nm4OjoAqwjFsG3r1n+h9u+d/sP3tv2Xm6ARvSv+hcoBgIBFBcX409P/mnYeiezGSgBkqaG6gnjUFJcgo72dkQjEbz2yqt4f9s2SILYEiwuzvUF8JwATdc8XZEuUEqtwQ8Dz3FIJBLwer1YtWoVHvj5LxCPxWCaBnbv3I2TTzoJBX4/ioqKUBQM9ui6lrOiIAQ2Y5xtWbCG+cxHGsERXQbDMOD1elnN2BqYZv7EW1tXGCedNBMTJ05ETU1N3nMEQYDLle1btNnoKmb8c5kVoYpLQSqVQnt7+xHhGnDYA4EAnnzySTz77LMoKSnJCxelFD2xHpQUl+Kya78Jj6Lg8YcfRUNDAy5ddhmqqmvw0K9/I/b1xREIFB2S8wIbbh0XA4jX60VzczNeffll+AsL4ZIkxHvjeOKPj6Puvfex8MKFUNNpxGMx/0CW32YMtm2jdtKkZkVRYJgfYCq0bcYDjA5X5I1EurBoyRJ23y/uR3tbW35fwrLg8/nQ2to6bHt3IBBAZ2enPZBHGY3ToaZpPABMnjwZTU1NiMfjR4SLEAJVVfG3v/0tZ2nyndPb10cqKiqxdMnX4JJl9CUSkGUZituN6TNnombsWIRCodpcph1AxtTgDwQSU6ZMwaYNrwuDP7AoCGpTYxPWPf88urq6oCgKNF0fMBbo6enBu3Xv480Nr1/bsHP3yUXBIAgAXVVRWFgYnzvntBcUtwJd0z8IWDYs2x628MpzAtLpVPnu3bvR1hbC4AYHxmx4PB4YLTp4gYehG9C0oU6qx+tFR7ijGAzg6OjsLRwoo1BKMWnSJDQ2NiIej0OW5WEfuAkTJmDr1q3YsGEDioqK8lo1VdUwc+zY2CXfWIpgURDRSAT+gB+WaSLg90NVNdx60823v7Fx07zSkrLc+yReRLAouDMWi4EQIhxqqxTZhfa2tsArL71UkkqnxLKyMmYYBq/peoGmqV6XrBg2Y4HNm95Y8upLLy/lKQXHZZPCncleLF7wtUeLAsFUdzQybNfaiGAV+gvDLpcSHa6+JLtkHAy1ztvy9lvluqZ3HGrGGWMQRBGRzk4YSRWmacDjcUN2uYZYLkVRUL979xWcZoKX5bzzL8uaYGLbdm66GOgmPp6k6zoEQcCUKVNQX1+P3t7eIXDZto3S0lK0tbXhgQceAM9nC8SDp0FCKVQ1A68gX9DR1nagqaFRsC1LJJQaWibjbqhvWHTdiqtr3tq8ea7X6+1fPQv0dHejekw1u+Sbl9z/j23vwrJM9k9jRRBQvNixddvC0N79OwkhAgNjYOBt2/KapglKOfT29iLS1YWCggJIkgTDMLC/sx0TJ09qvvTfl91ZU12N3t6yD5Z5nzxlSktbqK3NsIy8DZUeRcG+ln1KRUXlpBOmTuvo7u7OQcDzPCqqqvDAvfdBy6TR3dODCy+6Cp8773x0dXaC47n+SzJUVFRgyUWLq7tjUVSWV+WFinIUsku2ZFnODZTL5QLP8ccVXANt8KIoYurUqTnLNTAtWpaF4uJi9Pb2YtWqVdi5cycqKyvz+lYcR+F2u7H+xfWL1q5du2jA4R9o2qWUIp1KoShYlI2o+3NRPWoKyxcv+smsU2f3NDQ1wBj0IPM8DzWT4Vr2NBcTSnLuB6EkVy4SBAHBYBB9vX1oj4ShCDLOPGP+u5cu+9YXRUHoi8fjGGmHnBHBKvAXMkmWRA0MNskWZw97syAg1RNFXV3d506cPuP1AQePZqMG/Opn96N+1y7Mnj0bumHgd2sehEtRIAoCEn19oBwHZtvo6uxEKp3yCFTo91jYYf6LZVmgPEVJcbFVVlaWXf4BwB/ww+VywRyuYv8vhEvXdYiiiNraWuzZswexWAyiKCIYDCKRSOD2229HU1PTsFAdGjlJsgQJ0j+hGkjEEkDxeXJOdaw3hr5UEsu+edkjN9x048r6XbvQ3hEe4usN7FbDCJDWVDCbobCwAG7ZlYvy+qd1dsKJ0+uLK8vfPWf+Wa/MPHX2Y3U7ttvx3jjcbvfIub2RXnxve12bRuztgZIS6LYFmRxefLX7a/wN9Q1fmjBhwh2SLEPgefh8PsTjcextbEImnQblOChuLza/sRkvvbgenz3vXIiihNZQK6qqqrDlzbdO+sc7W+cFi4vzBqKWaSFYWmo88sgj6T88+geYpgnTNLNLOvwB+Hy+49LnGpgWJ0+ejN27d0OSJCQSCdx6661oaGhAVVXViEuqSX/tLplMguO47PqrfutsgCFlaNA0DZqqwufzobJ6TO9VX/rS/Tdef/0PLdPCtvfeQ09PD8RBjbuZTAblFRUR1dAbS6srYZgWv2d3w9xQWwgVFVUAGHRNg6Io2soffH/FaafP3dTash/hzk6Ewx2onThxwDX5YGAtW7Zsf31DwyPrXlh3n57KQJa4IVNUod+Pt97eMm31vfeee965576yp7kZiWQS1WPGoLSsDH19ff0fwoLX64WiKJAVBb2xGObMmQtwBL9ds+bHmVQKfr8f1mDrQylSmRROKCtvKC+riITDYQiCCEEQoGs6+np7IRxFtf1fOS0KgoBZs2Zhy5YtWLVqFRobG48IVdZiMViGhTFjqvsYs5OapoFQCsIAXhYRKC9tKw4Gt48fP37vK6++cmDB2Qve+Nx557VmMhm0HmxFy7598Hq9iPX0HHbd7u4ILl6yZO11t968jHIUobY2vPDc2vN31+24/vm1z3y+srwKituNvt5e+Zabb37ky0u+8t3K4rLnpk2bhvPP/zy8Hg94nodLcQ2f4xzpi+3ZswfpVCoxceLEbRk1k/eRUiQZRjpDn3/6mQfGVFVxZWVlSKdSkPJ0IQ/kZDRNw8EDBzFt6lS8u3XrF55du/aCYDA4FCoAzLKR1lXMmzfvuWuuvUZbsWI5rrrqSlx/w/VYsuTibLLOPn5zXwNwFRUV4amnnsKOHTtGnP4Ot9Q2kqkkLr9i2Y9mnnTSOELIOI/XO87j8YwLBPzjamtrTzv99NO/vWTJkrurx1Q/Ho1GW+PxOCih2NPcjGQqBT7PSlBGKTTLkKtrqpFKp9EWCsHn865f8/uHLpz/mbPfCHWFQUCgKApamveO/emPf/Jsy57my4pLijF16lT4fD5QjkIUxSHW8KjAKi4uxunz5ukXXviFxxLp/E0LxLJR4Q9i184dU1bfs/p/JVlGaVnZYUnAwRGRJEmYPHUqNr3++py77vj+X72SC+IwOZ9UKoWxldXmqaed+svG+npEuroQ6epCZziMZCIxKjqDB3yagXTE0T4IBEBBYQFe2fiaFurs0CVB1E3d0C3L0g3D0NPpNOLxOMLhMFRVBZddhoNYbxwHDh6AnOeeMgAGJTAJkM5kIPA8JEnCvpb9oISYP/rpvWePqamORCJdYADKgsWQGcVDv13zcHPz3tmKouS+B8kW0Y8drMbGRmx5+20obvc7BR4vEolk3gvZAKpKK/GHP/5x0a233VoXjUa/UBQMQlGUXITIcRxs20ZZeTncXo/npfUvrl7ylcWbo5GoWFwUzFsaEHge0UQM888660+FvoKO/Xtb0NUeRld7GB0HQ2ior885s6NBHHfsLfKCIKCrs0vQbROeYCH6NxQZNu8oiiKac9aKHxZYMlCeATBu3Dgs/spiRKJRTJwwwb5z5R1XJw0VuqbBtiz4i4qgqRruuOOODaG2EG9qOiLhTkQ7uxDt7Dp2H2v8+PFgYJg7b97fDzS3/Od9966+w+P1DJsOCPh82LOr/sSf3bP6ubp/vPt8X0+sXpIkQ1XVvbqmez1eb+VbmzfjL3/586K3//7WeEWSUFJamncKJISgN52EIMu48MtfvGvc2HHwuN25jdx8Ph9C7e1QVRUejwefVg1YeAICIopwFXih9SXzwiW7XGhva0NHRwdkWT4qv9M0TbhcLkw9YRoSfQmkkilcsHDhn7++5Gu//d8///mqMeWVYLaNstIy7Krb7rnv7tWrv3vtNTcZus5Guv6IYHnc2QHTNQ033nzTna+sW39p3c666nFVY2Fa5hC4RMKhPBCEYVp47q9PLfQVFCxUFAXtbe05y7L26WcAAOUlJWD9Ye1wU0e4O4qbbrn57tmnndaYzqQh9TuLAi8gkUwgmUwOO8d/KiGzLPCSCHiVbPfYoPvlcbuzeaxYDD6v96i3nzRNE+l0Goo7O8MIsog7/+P/3fbmu1sXR9s7gyWFfli2jRJ/AL95cM0NZ86fv/7ipV9bHw53fjDnXdc06JqGnkg3BEHAmv/+/fljKqpS+0MHQPsXqg2ev61+61VSWprb/llVVej9dSh/IIBAURHsYWpjHOWgqxoOdHVgyVcvfvTOO+5cyYkCGCXgBQGcIKCgKIDunh60hULDlkw+rWK2DSqKAE9B+0stA1NgKBRCMpmEW1GOKaDJbefZ/5BnMhmUlZX1fu+22xfaloVMJgNCCGSXCzLh8KtfPHB/R0eYtxlDMpU6drAGnDOO59DZ0YkpUyY3rPn972bPmD1r5772EPp0FRihz46QbHZYEATwPJ+rEQ5XbKWEoCvWje50Ates+M6DN99yy2VdnZ1IJZO59xEAmqri4IGDcLlcx3VE+HEWvS3bRrijA5Zlged5nH322QgEAojH4x9oZxrGWC7AUFUV8Xgc31i69J1LL7vswXAsmstblZeWY8s/3p5y1113/bg11IrW1oPHDtZhJ3IUbaFWVNfUNCxevHjOl7+y+GEicuju6UGiPzrLLrElR31zBt5jmRbi8TjisRgCwUDk5u/ddvnKO++4Kh6PI5VKHQakx+NBW2srGusb4HIpOct56EEIsXOfZ5gje0EdYBohA/u9sEOOfhtMYBNCcMRrHen3Heu5g77PkEOSZcRiMdTV1aGjowM+nw+FhYXg+jcIHnS+TSk5bJYZHEQMFNEHmjZs24aqqli0eNGNlaUVsd54HDyXbWQt8Qfx1N+euiXSFamZfsL0Y/exhkY1PKLd3UgmEul5c+d+a8aM6fcd3Lv/9ne3vvON/Xv3Edq/dDWZTOasFNffYTtAvGWZ0HVjoEMFfX19KC4pRnllRdNFF130m4UXfenx7Tt3dnVHe6Bp6mFPnyAI0HUdG159DZ2dnSj0Fw6xfqZtIRqNjommE1BVdcjrKWZC7OwsZ4wRwhUC1Fti23ny/TZAiQZGRbdhWEin01J3dzdUQYQ4qEvHyqZFChlYXp9xYOCi0Sgsy8LBgweHPYcxVgUAQv91RVAQl+QfKOcccjJs20a4sxNutxtFRUV5s+EuxYVoNFqyP9yR3eCm/7rR7u7Sw6LGfs56Y3GYhgFKKLq7oigtLUut/ulPz19x5ZXvNIX2gwfAAdAArFy58vVzzjnn17/4+c9XfyiwDvnyCIfDKPT7d351ycWXBAOBH6cymVqTWRdt2rTprMoJY6GpmqAbus/QDd8hXSim7JIjgiCoHMcRZtvW0nPP/V3HwVB9TXX12hNPnGmVlJQgGo2CMTvvUxWPxzFx8iRMmzE9b/lHFCXUTpq0euYpJz8lS7LFBu1XrWsa8fgK04RyhsYCYL7PXW2V/aDin0V2BhCeEVsjTN8xzbS0tQUFBZg6pXb/ty6//D6BF/TBvmW8r9c1a9asF5OJZM5iDFZ3dzeWLVuGc845Z9iAg2RrrF8DY4UU/6wLKm5l50i1xPLycsiynBdqjuegZtRnTp19agsBGKEEumGQMWPGtEaj0cPusSAKUDkOqd4EOJ4HAwPPcZhQO3Hrf/zk7tOJyFVwIIz0p5gSiUSxbVnxD22xBmfQ0+k0UqkUeuO9u+cvOHt3LBHfEGpvn3L7927H3ua9SnNz85hwZ3hKPBYfKwhCuri4eGdtbW39CdNOiNc31pMnnnjCXvDZc7eue+ZZpFIpJBIJJBKJYX0EwzAgyzJmzpwJnueH9dXGjR+3cer0EzYOecqRXeZLaDavZmUSoILyDilclNvZaMBBIAywUlVPI/403G4Z5eX+A6effvotHM8N2WI5nUzRmrE1tmmaw+aOVFXFGWecgQULFhwpDfAqpTRXZLYtG+YR/s7OwDr0EYxB0xnz5zex/p4vSgh6473oS/Qd9iAMbGVOOS77Rwn6o/a2UAizTp391px5c5Hqd9Z5joOu61CHabsnx2ONzdHol9Ow6sgBy5EDliMHLEeOHLAcOWA5csBy5MgBy5EDliMHLEeOHLAcOWA5csBy5MgBy5EDliMHLEeOHLAcOWA5csBy5MgBy5EDliMHLEeOHLAcOWA5csBy5MgBy5EDlqP/I/r/AwAQWXFT8106aAAAAABJRU5ErkJggg==" alt="UTFPR logo" class="h-24 w-auto">
+            </div>
+
+            <h1 class="absolute left-1/2 -translate-x-1/2 text-sm font-semibold leading-tight whitespace-nowrap" style="font-family: 'Pontano Sans', sans-serif;">
+                Sistema de Gestão de Certificados Eletrônicos UTFPR
+            </h1>
+
+            <div class="ml-auto text-xs">
+                Usuário: admin <a href="#" class="hover:underline ml-1">Sair</a>
+            </div>
+        </div>
+
+        <div class="flex justify-end items-center gap-6 text-sm px-4 pb-2">
+            <a href="#" class="hover:underline">Cadastros</a>
+            <a href="#" class="hover:underline">Certificados</a>
+            <a href="#" class="font-bold underline text-[#ffcc00]">Evento (Novo)</a>
+            <a href="#" class="hover:underline">Sistema</a>
+        </div>
+    </div>
+
+    <div class="flex-1 w-full max-w-5xl mx-auto mt-8 mb-12">
+
+        <h2 class="text-xl text-[#3b5064] font-bold mb-4">Consulta e Gestão de Eventos</h2>
+
+        <div class="content-box p-5 mb-8 flex justify-between items-center">
+            <div class="flex items-center gap-3 w-2/3">
+                <label class="text-sm font-bold text-gray-700 whitespace-nowrap">Busca Evento* :</label>
+                <select class="border border-gray-300 p-1 w-full text-sm focus:outline-none bg-gray-100">
+                    <option selected>OldDuck Nostalgia - 13/09/2026</option>
+                    <option>Curitiba - TT - Tutorial - Teste</option>
+                    <option>UTFPR - NOVO - 01/01/2016 a 08/01/2016</option>
+                </select>
+            </div>
+            <button class="btn-sgce px-4 py-1.5 text-sm rounded-sm font-semibold">
+                + Novo Evento
+            </button>
+        </div>
+
+        <!-- ABAS PRINCIPAIS DO EVENTO: Informações / Modelos de Certificados / Organizadores / Participantes -->
+        <div class="flex mb-[-1px] z-10 relative">
+            <button onclick="trocarAba('informacoes')" id="tab-informacoes" class="tab-inactive px-6 py-2.5 text-sm w-1/4">Informações</button>
+            <button onclick="trocarAba('modelos')" id="tab-modelos" class="tab-inactive px-6 py-2.5 text-sm w-1/4">Modelos de Certificados</button>
+            <button onclick="trocarAba('organizadores')" id="tab-organizadores" class="tab-active px-6 py-2.5 text-sm w-1/4">Organizadores</button>
+            <button onclick="trocarAba('participantes')" id="tab-participantes" class="tab-inactive px-6 py-2.5 text-sm w-1/4">Participantes</button>
+        </div>
+
+        <!-- ===================== PAINEL: INFORMAÇÕES ===================== -->
+        <div id="painel-informacoes" class="content-box p-6 min-h-[250px] relative z-0 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-700">Editar Evento</h3>
+                <div class="flex gap-2">
+                    <button class="btn-sgce px-4 py-1.5 text-sm rounded-sm font-semibold">Salvar</button>
+                    <button class="bg-red-600 hover:bg-red-700 text-white border border-red-800 px-4 py-1.5 text-sm rounded-sm font-semibold">Cancelar</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Código:</label>
+                    <input type="text" value="21" disabled class="w-full border border-gray-300 bg-gray-200 p-1.5 text-gray-500">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Câmpus promotor:</label>
+                    <input type="text" value="Curitiba" disabled class="w-full border border-gray-300 bg-gray-200 p-1.5 text-gray-500">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Nome*:</label>
+                    <input type="text" value="OldDuck Nostalgia" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Sigla*:</label>
+                    <input type="text" value="ODN" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Data de Início*:</label>
+                    <input type="text" value="13/09/2026" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Data de Término*:</label>
+                    <input type="text" value="13/09/2026" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Carga Horária*:</label>
+                    <input type="text" value="8" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Área do Evento*:</label>
+                    <select class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                        <option>Ensino</option>
+                        <option>Pesquisa</option>
+                        <option>Extensão</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Departamento (Sigla):</label>
+                    <input type="text" value="OLDUCK" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Local de Realização*:</label>
+                    <input type="text" value="UTFPR" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Site do Evento:</label>
+                    <input type="text" value="" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">E-mail do Evento*:</label>
+                    <input type="text" value="oldduck@teste.com" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                    <p class="text-xs text-blue-700 mt-1">Necessário E-mail VÁLIDO para envio dos certificados</p>
+                </div>
+            </div>
+
+            <p class="text-xs text-red-600 mt-6">* Campos Obrigatórios</p>
+        </div>
+
+        <!-- ===================== PAINEL: MODELOS DE CERTIFICADOS ===================== -->
+        <div id="painel-modelos" class="content-box p-6 min-h-[250px] relative z-0 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-700">Modelos de Certificados do Evento</h3>
+                <button class="bg-green-600 hover:bg-green-700 text-white border border-green-800 px-3 py-1.5 text-sm shadow-sm font-semibold">
+                    + Novo Modelo
+                </button>
+            </div>
+
+            <table class="w-full text-left text-sm border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100 border-b border-gray-300">
+                        <th class="p-2 border-r border-gray-300 font-bold text-gray-700 w-16">Código</th>
+                        <th class="p-2 border-r border-gray-300 font-bold text-gray-700">Nome do Modelo</th>
+                        <th class="p-2 border-r border-gray-300 font-bold text-gray-700 text-center w-24">Editar</th>
+                        <th class="p-2 font-bold text-gray-700 text-center w-24">Excluir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-300 hover:bg-yellow-50">
+                        <td class="p-2 border-r border-gray-300">07</td>
+                        <td class="p-2 border-r border-gray-300">Modelo de Teste</td>
+                        <td class="p-2 border-r border-gray-300 text-center text-blue-600 font-bold cursor-pointer hover:underline">✎</td>
+                        <td class="p-2 text-center text-red-600 font-bold cursor-pointer hover:underline">X</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===================== PAINEL: ORGANIZADORES ===================== -->
+        <div id="painel-organizadores" class="content-box p-6 min-h-[250px] relative z-0">
+
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-700">Cadastro de Organizadores</h3>
+                <button class="bg-green-600 hover:bg-green-700 text-white border border-green-800 px-3 py-1.5 text-sm shadow-sm font-semibold">
+                    + Adicionar Organizador
+                </button>
+            </div>
+
+            <table class="w-full text-left text-sm border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100 border-b border-gray-300">
+                        <th class="p-2 border-r border-gray-300 font-bold text-gray-700 w-16">Código</th>
+                        <th class="p-2 border-r border-gray-300 font-bold text-gray-700">Nome Organizador</th>
+                        <th class="p-2 border-r border-gray-300 font-bold text-gray-700 text-center w-24">Controlador</th>
+                        <th class="p-2 font-bold text-gray-700 text-center w-24">Excluir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-300 hover:bg-yellow-50">
+                        <td class="p-2 border-r border-gray-300">13</td>
+                        <td class="p-2 border-r border-gray-300">thays</td>
+                        <td class="p-2 border-r border-gray-300 text-center text-green-600 font-bold cursor-pointer hover:underline">V</td>
+                        <td class="p-2 text-center text-red-600 font-bold cursor-pointer hover:underline">X</td>
+                    </tr>
+                    <tr class="border-b border-gray-300 hover:bg-yellow-50">
+                        <td class="p-2 border-r border-gray-300">14</td>
+                        <td class="p-2 border-r border-gray-300">Leo</td>
+                        <td class="p-2 border-r border-gray-300 text-center text-green-600 font-bold cursor-pointer hover:underline">V</td>
+                        <td class="p-2 text-center text-red-600 font-bold cursor-pointer hover:underline">X</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="flex items-center gap-2 mt-6 text-sm justify-center">
+                <select class="border border-gray-300 p-1 bg-gray-100 focus:outline-none">
+                    <option>15</option>
+                    <option>30</option>
+                </select>
+                <button class="btn-sgce px-3 py-1 text-xs">Alterar Nº por página</button>
+            </div>
+        </div>
+
+        <!-- ===================== PAINEL: PARTICIPANTES (Opção C - sub-telas sequenciais) ===================== -->
+        <div id="painel-participantes" class="content-box p-6 min-h-[250px] relative z-0 hidden">
+
+            <!-- Sub-navegação interna do Participantes, simula a navegação sequencial
+                 do sistema original (Cadastros > Participantes, Certificados > Importar
+                 Dados, Certificados > Notificação de Participantes), só que sem perder
+                 o contexto do evento já selecionado. -->
+            <div class="flex gap-4 mb-5 pb-3 border-b border-gray-300 text-sm">
+                <button onclick="trocarSubPainel('lista')" id="subtab-lista" class="font-bold text-[#3b5064] underline">Lista de Participantes</button>
+                <button onclick="trocarSubPainel('importar')" id="subtab-importar" class="text-gray-600 hover:underline">Importar Dados (CSV)</button>
+                <button onclick="trocarSubPainel('notificar')" id="subtab-notificar" class="text-gray-600 hover:underline">Notificação de Participantes</button>
+            </div>
+
+            <!-- SUB-TELA: LISTA DE PARTICIPANTES -->
+            <div id="sub-lista">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-700">Cadastro de Participantes</h3>
+                    <button onclick="trocarSubPainel('form')" class="bg-green-600 hover:bg-green-700 text-white border border-green-800 px-3 py-1.5 text-sm shadow-sm font-semibold">
+                        + Novo Participante
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 mb-4 text-sm">
+                    <select class="border border-gray-300 p-1 bg-gray-100 focus:outline-none">
+                        <option>Nome do Participante</option>
+                        <option>CPF</option>
+                    </select>
+                    <input type="text" placeholder="(em branco para listar todos)" class="border border-gray-300 p-1 flex-1 focus:outline-none">
+                    <button class="btn-sgce px-3 py-1 text-xs">Pesquisar</button>
+                </div>
+
+                <table class="w-full text-left text-sm border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100 border-b border-gray-300">
+                            <th class="p-2 border-r border-gray-300 font-bold text-gray-700 w-14">Código</th>
+                            <th class="p-2 border-r border-gray-300 font-bold text-gray-700 w-32">CPF</th>
+                            <th class="p-2 border-r border-gray-300 font-bold text-gray-700">Nome</th>
+                            <th class="p-2 border-r border-gray-300 font-bold text-gray-700">Modelo de Certificado</th>
+                            <th class="p-2 border-r border-gray-300 font-bold text-gray-700 text-center w-20">Editar</th>
+                            <th class="p-2 font-bold text-gray-700 text-center w-20">Excluir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-300 hover:bg-yellow-50">
+                            <td class="p-2 border-r border-gray-300">1</td>
+                            <td class="p-2 border-r border-gray-300">900000001-01</td>
+                            <td class="p-2 border-r border-gray-300">John Know Nothing Snow</td>
+                            <td class="p-2 border-r border-gray-300">Modelo de Teste</td>
+                            <td class="p-2 border-r border-gray-300 text-center text-blue-600 font-bold cursor-pointer hover:underline" onclick="trocarSubPainel('form')">✎</td>
+                            <td class="p-2 text-center text-red-600 font-bold cursor-pointer hover:underline">X</td>
+                        </tr>
+                        <tr class="border-b border-gray-300 hover:bg-yellow-50">
+                            <td class="p-2 border-r border-gray-300">2</td>
+                            <td class="p-2 border-r border-gray-300">900000001-02</td>
+                            <td class="p-2 border-r border-gray-300">Sansa Stark</td>
+                            <td class="p-2 border-r border-gray-300">Modelo de Teste</td>
+                            <td class="p-2 border-r border-gray-300 text-center text-blue-600 font-bold cursor-pointer hover:underline" onclick="trocarSubPainel('form')">✎</td>
+                            <td class="p-2 text-center text-red-600 font-bold cursor-pointer hover:underline">X</td>
+                        </tr>
+                        <tr class="border-b border-gray-300 hover:bg-yellow-50">
+                            <td class="p-2 border-r border-gray-300">3</td>
+                            <td class="p-2 border-r border-gray-300">900000001-03</td>
+                            <td class="p-2 border-r border-gray-300">Arya Stark</td>
+                            <td class="p-2 border-r border-gray-300">Modelo de Teste</td>
+                            <td class="p-2 border-r border-gray-300 text-center text-blue-600 font-bold cursor-pointer hover:underline" onclick="trocarSubPainel('form')">✎</td>
+                            <td class="p-2 text-center text-red-600 font-bold cursor-pointer hover:underline">X</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="flex items-center gap-2 mt-6 text-sm justify-center">
+                    <select class="border border-gray-300 p-1 bg-gray-100 focus:outline-none">
+                        <option>15</option>
+                        <option>30</option>
+                    </select>
+                    <button class="btn-sgce px-3 py-1 text-xs">Alterar Nº por página</button>
+                </div>
+            </div>
+
+            <!-- SUB-TELA: NOVO/EDITAR PARTICIPANTE -->
+            <div id="sub-form" class="hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-700">Novo Participante</h3>
+                    <button onclick="trocarSubPainel('lista')" class="text-sm text-gray-600 hover:underline">← Voltar para a lista</button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm max-w-2xl">
+                    <div class="col-span-2">
+                        <label class="block font-bold text-gray-700 mb-1">Modelo de Certificado*:</label>
+                        <select class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                            <option>Modelo de Teste</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block font-bold text-gray-700 mb-1">Nome*:</label>
+                        <input type="text" placeholder="" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Documento:</label>
+                        <input type="text" placeholder="" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">E-mail*:</label>
+                        <input type="text" placeholder="" class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                    </div>
+                </div>
+
+                <p class="text-xs text-red-600 mt-6">* Campos Obrigatórios</p>
+
+                <div class="flex gap-2 mt-6">
+                    <button onclick="trocarSubPainel('lista')" class="btn-sgce px-4 py-1.5 text-sm rounded-sm font-semibold">Salvar</button>
+                    <button onclick="trocarSubPainel('lista')" class="bg-red-600 hover:bg-red-700 text-white border border-red-800 px-4 py-1.5 text-sm rounded-sm font-semibold">Cancelar</button>
+                </div>
+            </div>
+
+            <!-- SUB-TELA: IMPORTAR DADOS (CSV) -->
+            <div id="sub-importar" class="hidden">
+                <h3 class="text-lg font-bold text-gray-700 mb-4">Importação de Dados</h3>
+
+                <div class="text-sm space-y-4 max-w-2xl">
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Passo 1: Selecione Modelo de Certificado*:</label>
+                        <select class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                            <option>Modelo de Teste</option>
+                        </select>
+                    </div>
+
+                    <p class="text-blue-700 text-xs">Atenção: os itens no cabeçalho do arquivo CSV devem estar sem espaços, não possuir acentuação e de acordo com as instruções abaixo.</p>
+
+                    <div class="bg-gray-50 border border-gray-300 p-3 text-xs text-gray-700">
+                        O arquivo importado deve estar no formato CSV, com a separação dos campos por ponto-e-vírgula (;) e ter, obrigatoriamente, os campos NOME_PARTICIPANTE e EMAIL_PARTICIPANTE. Poderá também conter outros campos, desde que formados por palavras maiúsculas separadas pelo caractere sublinhado (underline), como no texto de exemplo.
+                    </div>
+
+                    <div>
+                        <span class="block font-bold text-gray-700 mb-1">Passo 2: Verificar Formato de Arquivo Suportado:</span>
+                        <a href="#" class="text-blue-700 hover:underline">DOWNLOAD do arquivo Modelo de CSV para importação das informações.</a>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Passo 3: Arquivo*:</label>
+                        <input type="file" class="w-full border border-gray-300 p-1.5 bg-white text-xs">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Passo 4: Permitir registros duplicados?</label>
+                        <select class="w-48 border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                            <option>Não</option>
+                            <option>Sim</option>
+                        </select>
+                    </div>
+
+                    <p class="text-xs text-red-600">* Campos Obrigatórios</p>
+
+                    <div class="flex gap-2 pt-2">
+                        <button onclick="trocarSubPainel('resultado-importacao')" class="btn-sgce px-4 py-1.5 text-sm rounded-sm font-semibold">Importar</button>
+                        <button onclick="trocarSubPainel('lista')" class="bg-red-600 hover:bg-red-700 text-white border border-red-800 px-4 py-1.5 text-sm rounded-sm font-semibold">Voltar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TELA: RESULTADO DA IMPORTAÇÃO -->
+            <div id="sub-resultado-importacao" class="hidden">
+                <h3 class="text-lg font-bold text-gray-700 mb-4">Importação Concluída!</h3>
+                <div class="bg-gray-50 border border-gray-300 p-4 text-sm max-w-md">
+                    <p>Linhas lidas do arquivo: <span class="font-bold">8</span></p>
+                    <p>Participantes importados: <span class="font-bold">8</span></p>
+                    <p>Certificados gerados: <span class="font-bold">8</span></p>
+                </div>
+                <button onclick="trocarSubPainel('lista')" class="btn-sgce px-4 py-1.5 text-sm rounded-sm font-semibold mt-4">
+                    Ver Participantes Importados
+                </button>
+            </div>
+
+            <!-- SUB-TELA: NOTIFICAÇÃO DE PARTICIPANTES -->
+            <div id="sub-notificar" class="hidden">
+                <h3 class="text-lg font-bold text-gray-700 mb-4">Notificação de Participantes</h3>
+
+                <div class="text-sm space-y-4 max-w-2xl">
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Modelo de Certificado*:</label>
+                        <select class="w-full border border-gray-300 p-1.5 focus:outline-none focus:border-[#3b5064]">
+                            <option>Modelo de Teste</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Selecione os Destinatários*:</label>
+                        <p class="text-xs text-gray-500 mb-1">Será enviado para cada linha marcada; segure a tecla ctrl e clique com o mouse para selecionar individualmente mais de um fora de ordem.</p>
+                        <select multiple class="w-full border border-gray-300 p-1.5 h-32 focus:outline-none focus:border-[#3b5064] text-sm">
+                            <option selected>John Know Nothing Snow - 900000001-01</option>
+                            <option selected>Sansa Stark - 900000001-03</option>
+                            <option>Arya Stark - 900000001-04</option>
+                        </select>
+                    </div>
+
+                    <p class="text-xs text-red-600">* Campos Obrigatórios</p>
+
+                    <div class="flex gap-2 pt-2">
+                        <button onclick="alert('Número total de participantes selecionados: 2\n\nJohn Know Nothing Snow - 900000001-01\nSansa Stark - 900000001-03')" class="bg-[#3b5064] hover:bg-[#2c3e50] text-white border border-[#2c3e50] px-4 py-1.5 text-sm rounded-sm font-semibold">
+                            ✉ Enviar
+                        </button>
+                        <button onclick="trocarSubPainel('lista')" class="bg-red-600 hover:bg-red-700 text-white border border-red-800 px-4 py-1.5 text-sm rounded-sm font-semibold">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="border-t border-gray-300 text-center text-xs text-gray-500 py-4 mt-auto w-full bg-white">
+        Desenvolvido: NTIC - Universidade Federal Do Pampa<br>
+        Modificado em 2016 para uso na UTFPR, pela DIRGTI Versão 2.0
+    </div>
+
+    <script>
+        // Troca entre as 4 abas principais do Evento: Informações, Modelos de
+        // Certificados, Organizadores, Participantes. Mantém o contexto do
+        // evento selecionado sem recarregar a página (proposta de melhoria de UX).
+        function trocarAba(aba) {
+            const abas = ['informacoes', 'modelos', 'organizadores', 'participantes'];
+
+            abas.forEach(function (nome) {
+                const painel = document.getElementById('painel-' + nome);
+                const botaoTab = document.getElementById('tab-' + nome);
+
+                if (nome === aba) {
+                    painel.classList.remove('hidden');
+                    botaoTab.classList.remove('tab-inactive');
+                    botaoTab.classList.add('tab-active');
+                } else {
+                    painel.classList.add('hidden');
+                    botaoTab.classList.remove('tab-active');
+                    botaoTab.classList.add('tab-inactive');
+                }
+            });
+
+            // Sempre que entrar na aba Participantes, volta para a sub-tela de Lista
+            if (aba === 'participantes') {
+                trocarSubPainel('lista');
+            }
+        }
+
+        // Troca entre as sub-telas dentro de Participantes (Opção C: fluxo
+        // sequencial, replicando o sistema original, mas sem perder o evento
+        // já selecionado no contexto da aba Evento):
+        // Lista -> Novo/Editar Participante -> Importar CSV -> Resultado da
+        // Importação -> Notificação de Participantes.
+        function trocarSubPainel(sub) {
+            const subTelas = ['lista', 'form', 'importar', 'resultado-importacao', 'notificar'];
+
+            subTelas.forEach(function (nome) {
+                const el = document.getElementById('sub-' + nome);
+                if (el) {
+                    el.classList.toggle('hidden', nome !== sub);
+                }
+            });
+
+            // Atualiza o destaque visual da sub-navegação (Lista / Importar / Notificar).
+            // O "form" e "resultado-importacao" não têm botão próprio na sub-nav,
+            // então mantém o último destaque relevante (Lista) quando ativos.
+            const subNavMap = { lista: 'lista', form: 'lista', importar: 'importar', 'resultado-importacao': 'importar', notificar: 'notificar' };
+            const ativo = subNavMap[sub];
+
+            ['lista', 'importar', 'notificar'].forEach(function (nome) {
+                const botao = document.getElementById('subtab-' + nome);
+                if (!botao) return;
+                if (nome === ativo) {
+                    botao.classList.remove('text-gray-600');
+                    botao.classList.add('font-bold', 'text-[#3b5064]', 'underline');
+                } else {
+                    botao.classList.remove('font-bold', 'text-[#3b5064]', 'underline');
+                    botao.classList.add('text-gray-600');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
